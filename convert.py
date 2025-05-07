@@ -540,29 +540,29 @@ def main() -> None:
             if path.is_file():
                 srcs.append(path)
 
-        total_size = sum(os.path.getsize(fp) for fp in srcs)
-        with tqdm(total=total_size, unit='B', unit_scale=True, desc="Processing") as pbar:
-            for src in tqdm(srcs, desc="Converting bags", unit="bag"):
-                print("Converting: ", src)
-                file_size = os.path.getsize(src)
-                try:
-                    convert(
-                        srcs=[src],
-                        dst=Path(args.dst + "/" + src.stem),
-                        dst_storage='mcap',
-                        dst_version=8,
-                        compress="ZSTD",
-                        compress_mode='storage',
-                        default_typestore=get_typestore(Stores.ROS1_NOETIC),
-                        typestore=typestore,
-                        exclude_topics=[],
-                        include_topics=None,
-                        exclude_msgtypes=[],
-                        include_msgtypes=None,
-                    )
-                except Exception as err:
-                    print(f'Error converting {src}: {err}')
-                pbar.update(file_size)
+    total_size = sum(os.path.getsize(fp) for fp in srcs)
+    with tqdm(total=total_size, unit='B', unit_scale=True, desc="Processing") as pbar:
+        for src in tqdm(srcs, desc="Converting bags", unit="bag"):
+            print("Converting: ", src)
+            file_size = os.path.getsize(src)
+            try:
+                convert(
+                    srcs=[src],
+                    dst=Path(args.dst + "/" + src.stem),
+                    dst_storage='mcap',
+                    dst_version=8,
+                    compress="ZSTD",
+                    compress_mode='storage',
+                    default_typestore=get_typestore(Stores.ROS1_NOETIC),
+                    typestore=typestore,
+                    exclude_topics=[],
+                    include_topics=None,
+                    exclude_msgtypes=[],
+                    include_msgtypes=None,
+                )
+            except Exception as err:
+                print(f'Error converting {src}: {err}')
+            pbar.update(file_size)
 
 if __name__ == '__main__':
     main()
